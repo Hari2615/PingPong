@@ -132,8 +132,8 @@ while True:
         observation = env.reset() # reset env
         prev_x = None
 
-        # if running_reward > -21:
-        #     with open('time.txt', 'w') as f:
+        # if running_reward > 0:
+        #     with open('time_taken.txt', 'w') as f:
         #         f.write("Time Taken: {} \nEpisode: {} \nThreshold: {}".format(str(time.time() - start), episode_number, running_reward))
         #     break
 
@@ -141,6 +141,6 @@ while True:
         print ('ep %d: game finished, reward: %f' % (episode_number, reward) + ('' if reward == -1 else ' !!!!!!!!'))
     
     if time.time() - start >= 3600:
-        with open('time.txt', 'w') as f:
+        with open('threshlod.txt', 'w') as f:
             f.write("Threshold after 1 hour: {} \nEpisode: {}".format(running_reward, episode_number))
         break

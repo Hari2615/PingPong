@@ -1,2 +1,0 @@
-Threshold after 1 hour: -20.342053234025887 
-Episode: 431
