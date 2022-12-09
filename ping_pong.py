@@ -159,9 +159,9 @@ while True:
         print ('ep %d: game finished, reward: %f' % (episode_number, reward) + ('' if reward == -1 else ' !!!!!!!!'))
     
     if time.time() - start >= 7200:
-        with open('threshlod.txt', 'w') as f:
-            f.write("Threshold after 2 hour: {} \nEpisode: {}".format(running_reward, episode_number))
-            f.close()
+        # with open('threshlod.txt', 'w') as f:
+        #     f.write("Threshold after 2 hour: {} \nEpisode: {}".format(running_reward, episode_number))
+        #     f.close()
         with open('records_400.txt', 'w') as f:
             f.write("Thresholds: {} \nTimestamp: {} \nRamusage: {} \nCPUusage: {}".format(str(thresholds), str(time_record), str(ram_usage), str(cpu_usage)))
             f.close()
