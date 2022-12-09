@@ -11,7 +11,7 @@ start = time.time()
 # hyperparameters
 H = 200 # number of hidden layer neurons
 batch_size = 10 # every how many episodes to do a param update?
-learning_rate = 1e-4
+learning_rate = 1e-6
 gamma = 0.99 # discount factor for reward
 decay_rate = 0.99 # decay factor for RMSProp leaky sum of grad^2
 resume = False # resume from previous checkpoint?
@@ -162,7 +162,7 @@ while True:
         with open('threshlod.txt', 'w') as f:
             f.write("Threshold after 2 hour: {} \nEpisode: {}".format(running_reward, episode_number))
             f.close()
-        with open('records_200_1e3.txt', 'w') as f:
+        with open('records_1e6.txt', 'w') as f:
             f.write("Thresholds: {} \nTimestamp: {} \nRamusage: {} \nCPUusage: {}".format(str(thresholds), str(time_record), str(ram_usage), str(cpu_usage)))
             f.close()
             thresholds.clear()
