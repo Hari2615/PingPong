@@ -158,7 +158,7 @@ while True:
     if reward != 0: # Pong has either +1 or -1 reward exactly when game ends.
         print ('ep %d: game finished, reward: %f' % (episode_number, reward) + ('' if reward == -1 else ' !!!!!!!!'))
     
-    if time.time() - start >= 7200:
+    if time.time() - start >= 43200:
         with open('threshlod.txt', 'w') as f:
             f.write("Threshold after 2 hour: {} \nEpisode: {}".format(running_reward, episode_number))
             f.close()
