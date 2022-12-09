@@ -9,7 +9,7 @@ from email.message import EmailMessage
 start = time.time()
 
 # hyperparameters
-H = 200 # number of hidden layer neurons
+H = 400 # number of hidden layer neurons
 batch_size = 10 # every how many episodes to do a param update?
 learning_rate = 1e-4
 gamma = 0.99 # discount factor for reward
@@ -162,7 +162,7 @@ while True:
         with open('threshlod.txt', 'w') as f:
             f.write("Threshold after 2 hour: {} \nEpisode: {}".format(running_reward, episode_number))
             f.close()
-        with open('records_200_1e3.txt', 'w') as f:
+        with open('records_400.txt', 'w') as f:
             f.write("Thresholds: {} \nTimestamp: {} \nRamusage: {} \nCPUusage: {}".format(str(thresholds), str(time_record), str(ram_usage), str(cpu_usage)))
             f.close()
             thresholds.clear()
