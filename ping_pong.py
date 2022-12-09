@@ -3,6 +3,9 @@ import numpy as np
 import pickle as pickle
 import gym
 import time
+import smtplib
+import psutil
+from email.message import EmailMessage
 start = time.time()
 
 # hyperparameters
@@ -13,8 +16,16 @@ gamma = 0.99 # discount factor for reward
 decay_rate = 0.99 # decay factor for RMSProp leaky sum of grad^2
 resume = False # resume from previous checkpoint?
 render = True
-#threshold = -8
-
+gmail_user = 'Your Email'
+gmail_password = 'Your Password'
+sent_from = gmail_user
+to = ['email']
+subject = 'Test_Completed'
+body = 'Nodes %s' %H
+thresholds = []
+time_record = []
+ram_usage = []
+cpu_usage = []
 
 # model initialization
 D = 80 * 80 # input dimensionality: 80x80 grid
@@ -127,6 +138,8 @@ while True:
         # boring book-keeping
         running_reward = reward_sum if running_reward is None else running_reward * 0.99 + reward_sum * 0.01
         print('resetting env. episode reward total was %f. running mean: %f' % (reward_sum, running_reward))
+        print("RAM: ", psutil.virtual_memory().percent)
+        print("CPU: ", psutil.cpu_percent(4))
         if episode_number % 100 == 0: pickle.dump(model, open('save.p', 'wb'))
         reward_sum = 0
         observation = env.reset() # reset env
@@ -136,11 +149,39 @@ while True:
         #     with open('time_taken.txt', 'w') as f:
         #         f.write("Time Taken: {} \nEpisode: {} \nThreshold: {}".format(str(time.time() - start), episode_number, running_reward))
         #     break
+        thresholds.append(running_reward)
+        time_record.append(time.time() - start)
+        ram_usage.append(psutil.virtual_memory().percent)
+        cpu_usage.append(psutil.cpu_percent(4))
+        
 
     if reward != 0: # Pong has either +1 or -1 reward exactly when game ends.
         print ('ep %d: game finished, reward: %f' % (episode_number, reward) + ('' if reward == -1 else ' !!!!!!!!'))
     
-    if time.time() - start >= 3600:
+    if time.time() - start >= 7200:
         with open('threshlod.txt', 'w') as f:
-            f.write("Threshold after 1 hour: {} \nEpisode: {}".format(running_reward, episode_number))
+            f.write("Threshold after 2 hour: {} \nEpisode: {}".format(running_reward, episode_number))
+            f.close()
+        with open('records_200_1e3.txt', 'w') as f:
+            f.write("Thresholds: {} \nTimestamp: {} \nRamusage: {} \nCPUusage: {}".format(str(thresholds), str(time_record), str(ram_usage), str(cpu_usage)))
+            f.close()
+            thresholds.clear()
+            time_record.clear()
+            ram_usage.clear()
+            cpu_usage.clear()
+            msg = EmailMessage()
+            msg['Subject'] = subject
+            msg['From'] = sent_from
+            msg['To'] = ', '.join(to)
+            msg.set_content('Nodes %s' %H)
+
+            try:
+                smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                smtp_server.ehlo()
+                smtp_server.login(gmail_user, gmail_password)
+                smtp_server.send_message(msg)
+                smtp_server.close()
+                print ("Email sent successfully!")
+            except Exception as ex:
+                print ("Something went wrong….",ex)
         break
